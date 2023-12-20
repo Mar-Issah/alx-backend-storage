@@ -1,4 +1,4 @@
-## alx-backend-storage
+## ALX backend-storage
 
 ALX_Africa | Holberton School Specialization programme
 
