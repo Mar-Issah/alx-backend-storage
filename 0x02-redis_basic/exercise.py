@@ -19,8 +19,7 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    """ Decorator to store the history of inputs and
-    outputs for a particular function.
+    """ store the history of inputs and outputs for a method
     """
     key = method.__qualname__
     inputs = key + ":inputs"
@@ -28,23 +27,17 @@ def call_history(method: Callable) -> Callable:
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """ Wrapper for decorator functionality """
+        """ Wrapper for call_history func """
         self._redis.rpush(inputs, str(args))
         data = method(self, *args, **kwargs)
         self._redis.rpush(outputs, str(data))
         return data
-
     return wrapper
 
 
 def replay(method: Callable) -> None:
-    # sourcery skip: use-fstring-for-concatenation, use-fstring-for-formatting
     """
-    Replays the history of a function
-    Args:
-        method: The function to be decorated
-    Returns:
-        None
+    Replays the history of a method
     """
     name = method.__qualname__
     cache = redis.Redis()
